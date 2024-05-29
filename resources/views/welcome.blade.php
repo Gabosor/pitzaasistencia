@@ -10,19 +10,33 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="text-center py-10">
                     <div id="clock" class="text-9xl font-bold mb-10"></div>
-                    <div id="camera-container" class="mb-4">
-                        <div id="reader" class="w-full h-64 border-2 border-black mx-auto"></div>
-                    </div>
+
+                    @if ($errors->any())
+                        <div class="mb-4 bg-red-500 border border-red-800 py-2 ">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li class="text-white font-bold">{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    @if (session('status'))
+                        <div class="mb-4 bg-green-500 border border-green-800 text-white font-bold py-2 uppercase">
+                            {{ session('status') }}
+                            
+                        </div>
+                    @endif
+
                     <div class="max-w-md mx-auto">
-                        <form id="attendance-form"  method="POST" class="bg-white p-8 rounded shadow-md">
+                        <form id="attendance-form" action="{{ route('attendance.store') }}" method="POST" class="bg-white p-8 rounded shadow-md" novalidate>
                             @csrf
-                            <input type="hidden" id="employee_id" name="employee_id">
+                            <input type="text" id="employee_id" name="employee_id" placeholder="Ingresa tu código de empleado" class="w-full mb-4 p-3 border rounded text-lg" required>
                             <input type="submit" value="Registrar Asistencia" class="w-full bg-blue-500 text-white p-3 rounded text-lg cursor-pointer hover:bg-blue-600">
                         </form>
                     </div>
                 </div>
 
-                <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
                 <script>
                     function updateClock() {
                         const clockElement = document.getElementById('clock');
@@ -35,28 +49,6 @@
 
                     setInterval(updateClock, 1000);
                     updateClock(); // Initial call to display clock immediately
-
-                    // Initialize the QR code scanner
-                    function onScanSuccess(decodedText, decodedResult) {
-                        // Handle the result here
-                        console.log(`Scan result: ${decodedText}`, decodedResult);
-                        document.getElementById('employee_id').value = decodedText;
-                        document.getElementById('attendance-form').submit();
-                    }
-
-                    function onScanFailure(error) {
-                        console.warn(`Scan failed: ${error}`);
-                    }
-
-                    window.addEventListener('load', () => {
-                        updateClock();
-                        // Create a new instance of Html5QrcodeScanner
-                        const html5QrCodeScanner = new Html5QrcodeScanner(
-                            "reader", 
-                            { fps: 10, qrbox: 250 },
-                            false);
-                        html5QrCodeScanner.render(onScanSuccess, onScanFailure);
-                    });
                 </script>
             </div>
         </div>
