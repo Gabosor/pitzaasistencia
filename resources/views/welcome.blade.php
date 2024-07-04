@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-bold text-3xl text-gray-800 leading-tight text-center uppercase">
+        <h2 class="font-bold text-6xl text-white leading-tight text-center uppercase">
             {{ __('Registra tu Asistencia') }}
         </h2>
     </x-slot>
@@ -24,7 +24,7 @@
                     @if (session('status'))
                         <div class="mb-4 bg-green-500 border border-green-800 text-white font-bold py-2 uppercase">
                             {{ session('status') }}
-                            
+                            <p class=" font-bold text-5xl">{{session('employee_name')}}</p> 
                         </div>
                     @endif
 
@@ -48,7 +48,7 @@
                     }
 
                     setInterval(updateClock, 1000);
-                    updateClock(); // Initial call to display clock immediately
+                    updateClock(); 
                 </script>
             </div>
         </div>
