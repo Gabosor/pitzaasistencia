@@ -16,12 +16,9 @@
         
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-
-
-            <!-- Page Heading -->
+         <div class="min-h-screen bg-gray-100 bg-cover bg-center" style="background-image: url('/img/fondo.jpg');">
             @isset($header)
-                <header class=" bg-orange-600 shadow">
+                <header class=" shadow bg-orange-400">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>

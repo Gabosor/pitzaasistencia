@@ -11,12 +11,12 @@ class AttendanceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'employee_id' => 'required|string|max:255',
+            'ci' => 'required|string|max:255',
         ]);
-        $employee = Employee::where('employee_id', $request->employee_id)->first();
+        $employee = Employee::where('ci', $request->ci)->first();
 
         if (!$employee) {
-            return redirect()->route('welcome')->withErrors(['employee_id' => 'El código de empleado no está registrado.']);
+            return redirect()->route('welcome')->withErrors(['ci' => 'El código de empleado no está registrado.']);
         }
         Attendance::create([
             'employee_id' => $employee->id,
@@ -24,7 +24,7 @@ class AttendanceController extends Controller
         ]);
         return redirect()->route('welcome')->with([
                 'status' => 'Asistencia registrada con éxito',
-                'employee_name' => $employee->name
+                'employee_name' => $employee->nombres." ".$employee->apellidos
             ]);
 
     }
