@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\OrderResource\Pages;
-use App\Filament\Resources\OrderResource\RelationManagers;
-use App\Models\Order;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Order;
+use App\Models\Payment;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\OrderResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\OrderResource\RelationManagers;
 
 class OrderResource extends Resource
 {
@@ -28,10 +29,13 @@ class OrderResource extends Resource
                 Forms\Components\Toggle::make('estado')
                     ->required(),
                 Forms\Components\DateTimePicker::make('fecRealizado')
+                    ->default(now())
                     ->required(),
-                Forms\Components\TextInput::make('payment_id')
+                Forms\Components\Select::make('payment_id')
+                    ->label('Pago')
                     ->required()
-                    ->numeric(),
+                    ->options(Payment::all()->pluck('', 'id'))
+                    ->searchable(),
             ]);
     }
 

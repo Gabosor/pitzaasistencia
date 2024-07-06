@@ -27,7 +27,7 @@ class ClientResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('ci')
                     ->required()
-                    ->numeric(),
+                    ,
                 Forms\Components\TextInput::make('nombres')
                     ->required()
                     ->maxLength(255),
@@ -50,7 +50,7 @@ class ClientResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('ci')
-                    ->numeric()
+                    ->label('Carnet')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('nombres')
                     ->searchable(),
@@ -60,21 +60,14 @@ class ClientResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
+                Tables\Actions\DeleteAction::make(),
+                ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

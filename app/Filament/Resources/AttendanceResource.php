@@ -19,7 +19,7 @@ class AttendanceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
     protected static ?string $navigationLabel = 'Asistencia';
-    protected static ?string $modelLabel = 'Asistencia';
+    protected static ?string $modelLabel = 'Registro de Asistencia';
     protected static ?string $navigationGroup = 'Gestión';
     public static function form(Form $form): Form
     {
@@ -37,30 +37,30 @@ class AttendanceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.nombres')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('timestamp')
                     ->dateTime()
+                    ->label('Ingreso')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                 Tables\Columns\TextColumn::make('user.apellidos')
+                    ->label('Apellidos')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('user.nombres')
+                    ->label('Nombres')
+                    ->searchable()
+                    ->sortable(),
+                
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+               // Tables\Actions\EditAction::make(),
             ])
             
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+
                 ]),
             ])
             ->headerActions([]);

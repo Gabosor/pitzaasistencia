@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ServiceResource\Pages;
 use App\Filament\Resources\ServiceResource\RelationManagers;
+use App\Models\Company;
 use App\Models\Service;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -28,15 +29,18 @@ class ServiceResource extends Resource
                 Forms\Components\TextInput::make('nombre')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('observacion')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Textarea::make('observacion')
+                    ->required()    
+                    ->maxLength(1000),
                 Forms\Components\TextInput::make('pagoSer')
+                    ->label('Monto del Pago')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('companie_id')
+                Forms\Components\Select::make('companie_id')
+                    ->label('Compañia')
                     ->required()
-                    ->numeric(),
+                    ->options(Company::all()->pluck('email', 'id'))
+                    ->searchable(),
             ]);
     }
 
