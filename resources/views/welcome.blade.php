@@ -31,7 +31,7 @@
                     <div class="max-w-md mx-auto">
                         <form id="attendance-form" action="{{ route('attendance.store') }}" method="POST" class="bg-white p-8 rounded shadow-md" novalidate>
                             @csrf
-                            <input type="text" id="ci" name="ci" placeholder="Ingresa tu código" class="w-full mb-4 p-3 border rounded text-lg text-center" required>
+                            <input type="text" id="ci" name="ci" placeholder="Ingresa tu Carnet" class="w-full mb-4 p-3 border rounded text-lg text-center uppercase" required>
                             <input type="submit" value="Registrar Asistencia" class="w-full bg-blue-500 text-white p-3 rounded text-lg cursor-pointer hover:bg-blue-600 uppercase font-bold">
                         </form>
                     </div>

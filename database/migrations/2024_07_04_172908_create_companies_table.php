@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('razonSocial');
             $table->string('telefono');
             $table->string('email')->unique();
-            $table->unsignedBigInteger('employee_id'); 
+            $table->unsignedBigInteger('user_id'); 
             $table->timestamps();
-            $table->foreign('employee_id')->references('id')->on('employees');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

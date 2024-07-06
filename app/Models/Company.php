@@ -12,12 +12,12 @@ class Company extends Model
         'razonSocial',
         'telefono',
         'email',
-        'employee_id'
+        'user_id'
     ];
 
     public function personal()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(User::class);
     }
 
     public function services()
