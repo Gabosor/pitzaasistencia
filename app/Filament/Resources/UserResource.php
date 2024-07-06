@@ -29,10 +29,10 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
+                    ->label('Correo')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
@@ -46,11 +46,15 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\DatePicker::make('fechaIng')
+                    ->default(now())
                     ->required(),
-                Forms\Components\TextInput::make('rol')
+                Forms\Components\Select::make('rol')
                     ->required()
-                    ->maxLength(255)
-                    ->default(1),
+                    ->options([
+                        'empleado' => 'Empleado',
+                        'admin' => 'Admin',
+                    ])
+                    ->default('empleado'),
                 Forms\Components\TextInput::make('SalarioBase')
                     ->required()
                     ->numeric()
