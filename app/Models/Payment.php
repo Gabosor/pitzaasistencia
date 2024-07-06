@@ -12,7 +12,7 @@ class Payment extends Model
         'fecRealizado',
         'total',
         'client_id',
-        'employee_id'
+        'user_id'
     ];
 
     public function client()
@@ -22,7 +22,7 @@ class Payment extends Model
 
     public function personal()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(User::class);
     }
 
     public function orders()

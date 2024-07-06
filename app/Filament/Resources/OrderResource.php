@@ -20,6 +20,7 @@ class OrderResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
     protected static ?string $navigationLabel = 'Orden';
     protected static ?string $modelLabel = 'Orden';
+    protected static ?string $navigationGroup = 'Clientes y Pedidos';
     public static function form(Form $form): Form
     {
         return $form

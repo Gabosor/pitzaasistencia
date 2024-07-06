@@ -20,6 +20,7 @@ class PaymentResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
     protected static ?string $navigationLabel = 'Pago';
     protected static ?string $modelLabel = 'Pago';
+    protected static ?string $navigationGroup = 'Clientes y Pedidos';
     public static function form(Form $form): Form
     {
         return $form
@@ -32,7 +33,7 @@ class PaymentResource extends Resource
                 Forms\Components\TextInput::make('client_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('employee_id')
+                Forms\Components\TextInput::make('user_id')
                     ->required()
                     ->numeric(),
             ]);
@@ -51,7 +52,7 @@ class PaymentResource extends Resource
                 Tables\Columns\TextColumn::make('client_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('employee_id')
+                Tables\Columns\TextColumn::make('user_id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

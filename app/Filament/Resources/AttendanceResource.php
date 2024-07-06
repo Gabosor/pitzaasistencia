@@ -20,11 +20,12 @@ class AttendanceResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
     protected static ?string $navigationLabel = 'Asistencia';
     protected static ?string $modelLabel = 'Asistencia';
+    protected static ?string $navigationGroup = 'Gestión';
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('employee_id')
+                Forms\Components\TextInput::make('user_id')
                     ->required()
                     ->numeric(),
                 Forms\Components\DateTimePicker::make('timestamp')
@@ -36,8 +37,7 @@ class AttendanceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('employee_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('user.nombres')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('timestamp')
                     ->dateTime()
@@ -72,7 +72,10 @@ class AttendanceResource extends Resource
             //
         ];
     }
-    
+    public static function canCreate(): bool
+    {
+        return false;
+    }
     public static function getPages(): array
     {
         return [

@@ -20,6 +20,7 @@ class CompanyResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
     protected static ?string $navigationLabel = 'Compañia';
     protected static ?string $modelLabel = 'Compañia';
+    protected static ?string $navigationGroup = 'Gestión';
     public static function form(Form $form): Form
     {
         return $form
@@ -35,7 +36,7 @@ class CompanyResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('employee_id')
+                Forms\Components\TextInput::make('user_id')
                     ->required()
                     ->numeric(),
             ]);
@@ -51,7 +52,7 @@ class CompanyResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('employee_id')
+                Tables\Columns\TextColumn::make('user_id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

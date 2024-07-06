@@ -20,6 +20,7 @@ class ProductResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-cake';
     protected static ?string $navigationLabel = 'Producto';
     protected static ?string $modelLabel = 'Producto';
+    protected static ?string $navigationGroup = 'Productos y Servicios';
     public static function form(Form $form): Form
     {
         return $form

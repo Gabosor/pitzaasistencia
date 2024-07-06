@@ -20,6 +20,7 @@ class IngredientResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
     protected static ?string $navigationLabel = 'Ingrediente';
     protected static ?string $modelLabel = 'Ingrediente';
+    protected static ?string $navigationGroup = 'Productos y Servicios';
     public static function form(Form $form): Form
     {
         return $form

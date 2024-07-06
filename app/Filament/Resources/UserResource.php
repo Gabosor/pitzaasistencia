@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\EmployeeResource\Pages;
-use App\Filament\Resources\EmployeeResource\RelationManagers;
-use App\Models\Employee;
+use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,17 +13,30 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class EmployeeResource extends Resource
+class UserResource extends Resource
 {
-    protected static ?string $model = Employee::class;
+    protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
-    protected static ?string $navigationLabel = 'Personal';
-    protected static ?string $modelLabel = 'Personal';
+    protected static ?string $navigationLabel = 'Empleados';
+    protected static ?string $modelLabel = 'Empleado';
+    protected static ?string $navigationGroup = 'Gestión';
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\DateTimePicker::make('email_verified_at'),
+                Forms\Components\TextInput::make('password')
+                    ->password()
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('ci')
                     ->required()
                     ->numeric(),
@@ -33,27 +46,18 @@ class EmployeeResource extends Resource
                 Forms\Components\TextInput::make('apellidos')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('usuarios')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('clave')
-                    ->required()
-                    ->maxLength(255),
                 Forms\Components\DatePicker::make('fechaIng')
                     ->required(),
                 Forms\Components\TextInput::make('rol')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->default(1),
                 Forms\Components\TextInput::make('SalarioBase')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->default(0.00),
                 Forms\Components\TextInput::make('telefono')
                     ->tel()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
                     ->maxLength(255),
             ]);
     }
@@ -62,16 +66,27 @@ class EmployeeResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email_verified_at')
+                    ->dateTime()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('ci')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('nombres')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('apellidos')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('usuarios')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('clave')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('fechaIng')
                     ->date()
@@ -83,16 +98,6 @@ class EmployeeResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('telefono')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -117,9 +122,9 @@ class EmployeeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListEmployees::route('/'),
-            'create' => Pages\CreateEmployee::route('/create'),
-            'edit' => Pages\EditEmployee::route('/{record}/edit'),
+            'index' => Pages\ListUsers::route('/'),
+            'create' => Pages\CreateUser::route('/create'),
+            'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
 }
