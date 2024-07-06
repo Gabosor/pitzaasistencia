@@ -18,7 +18,7 @@ class AdminSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('password'), 
-            'ci' => '12345678',
+            'ci' => '123',
             'nombres' => 'Admin',
             'apellidos' => 'Admin',
             'fechaIng' => now(),

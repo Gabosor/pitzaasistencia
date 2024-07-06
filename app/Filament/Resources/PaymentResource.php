@@ -2,16 +2,18 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PaymentResource\Pages;
-use App\Filament\Resources\PaymentResource\RelationManagers;
-use App\Models\Payment;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Client;
+use App\Models\Payment;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PaymentResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PaymentResource\RelationManagers;
 
 class PaymentResource extends Resource
 {
@@ -26,16 +28,20 @@ class PaymentResource extends Resource
         return $form
             ->schema([
                 Forms\Components\DateTimePicker::make('fecRealizado')
+                    ->label('Fecha realizado')
+                    ->default(now())
                     ->required(),
                 Forms\Components\TextInput::make('total')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('client_id')
+                Forms\Components\Select::make('client_id')
+                    ->label('Cliente')
                     ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
+                    ->options(Client::all()->pluck('nombres', 'id'))
+                    ->searchable(),
+                Forms\Components\Hidden::make('user_id')
+                    ->default(fn() => Auth::id())
+                    ->required(),
             ]);
     }
 
@@ -44,25 +50,22 @@ class PaymentResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('fecRealizado')
+                    ->label('Fecha del Pago')
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('client_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('client.nombres')
+                   ->label('Cliente Nombres')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('client.apellidos')
+                    ->label('Cliente Apellidos')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('user.apellidos')
+                    ->label('Empleado')
+                    ->sortable(),
+               
             ])
             ->filters([
                 //
