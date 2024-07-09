@@ -16,9 +16,5 @@ class Client extends Model
         'telefono',
         'email'
     ];
-
-    public function payments()
-    {
-        return $this->hasMany(Payment::class);
-    }
+    
 }

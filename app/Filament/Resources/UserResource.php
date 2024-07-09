@@ -51,8 +51,8 @@ class UserResource extends Resource
                 Forms\Components\Select::make('rol')
                     ->required()
                     ->options([
-                        'empleado' => 'Empleado',
-                        'admin' => 'Admin',
+                        '0' => 'Empleado',
+                        '1' => 'Admin',
                     ])
                     ->default('empleado'),
                 Forms\Components\TextInput::make('SalarioBase')

@@ -14,7 +14,13 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # Serve React files from /public/react
+    RewriteCond %{REQUEST_URI} ^/react/(.*)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^react/(.*)$ react/$1 [L]
+
+    # Send Requests To Front Controller (Laravel)...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]

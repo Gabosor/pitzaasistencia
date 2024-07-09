@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombres');
             $table->string('apellidos');
             $table->date('fechaIng');
-            $table->string('rol')->default('empleado');
+            $table->boolean('rol')->default(0);
             $table->decimal('SalarioBase', 10, 2)->default(0);
             $table->string('telefono')->nullable();
             

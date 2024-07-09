@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AttendanceController;
 
-Route::get('/', function () {
+Route::get('/asistencia', function () {
     return view('welcome');
 })->name('welcome');
 
