@@ -14,6 +14,13 @@ class Pedido extends Model
         'estado',
         'client_id'
     ];
+    
+    public $timestamps = true;
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+    ];
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -22,6 +29,7 @@ class Pedido extends Model
     {
         return $this->belongsToMany(Producto::class, 'pedido_productos')->withPivot('cantidad');
     }
+    
     public function client()
     {
         return $this->belongsTo(Client::class);

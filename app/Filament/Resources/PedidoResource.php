@@ -1,15 +1,17 @@
 <?php
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PedidoResource\Pages;
-use App\Models\Pedido;
-use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\Action;
+use App\Models\Pedido;
+use App\Models\Factura;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PedidoResource\Pages;
+use Filament\Notifications\Notification;
 
 class PedidoResource extends Resource
 {
@@ -49,14 +51,13 @@ class PedidoResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
                 Filter::make('date_range')
                     ->form([
                         DatePicker::make('start_date')
                             ->label('Inicio Fecha')
                             ->default(now()),
                         DatePicker::make('end_date')
-                        ->default(now())
+                            ->default(now())
                             ->label('Fin Fecha'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
@@ -88,14 +89,29 @@ class PedidoResource extends Resource
                     ->requiresConfirmation()
                     ->color('success')
                     ->icon('heroicon-o-arrow-path'),
+                Action::make('printFactura')
+                    ->label('Imprimir Factura')
+                    ->action(function (Pedido $record) {
+                        $facturaExistente = Factura::where('pedido_id', $record->id)->first();
+                        if ($facturaExistente) {
+                            Notification::make()
+                                ->title('Error')
+                                ->body('La factura para este pedido ya ha sido impresa.')
+                                ->danger()
+                                ->send();
+                            return;
+                        }
+                        return redirect()->route('print.factura', $record);
+                    })
+                    ->color('primary')
+                    ->icon('heroicon-o-printer'),
                 Tables\Actions\DeleteAction::make(),
-                
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-   
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');  // Añade esta línea para ordenar por fecha de creación en orden descendente
     }
 
     public static function canCreate(): bool
