@@ -22,7 +22,7 @@ class AdminSeeder extends Seeder
             'nombres' => 'Admin',
             'apellidos' => 'Admin',
             'fechaIng' => now(),
-            'rol' => 'admin',
+            'rol' => 0,
             'SalarioBase' => 5000, 
             'telefono' => '1234567890',
         ]);

@@ -8,11 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Laravel\Sanctum\HasApiTokens;
 
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, Notifiable;
     protected $fillable = [
         'name',
         'email',
@@ -57,10 +58,6 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Company::class);
     }
 
-    public function payments()
-    {
-        return $this->hasMany(Payment::class);
-    }
 
     public function attendances()
     {

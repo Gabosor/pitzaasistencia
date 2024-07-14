@@ -13,6 +13,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+use Filament\Tables\Actions\Action;
+
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\DatePicker;
+
+
+
 class AttendanceResource extends Resource
 {
     protected static ?string $model = Attendance::class;
@@ -53,6 +60,33 @@ class AttendanceResource extends Resource
             ])
             ->filters([
                 //
+                 Filter::make('date_range')
+                    ->form([
+                        DatePicker::make('start_date')
+                            ->label('Inicio Fecha')
+                            ->default(now()),
+                        DatePicker::make('end_date')
+                        ->default(now())
+                            ->label('Fin Fecha'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['start_date'], fn (Builder $query, $date) => $query->whereDate('created_at', '>=', $date))
+                            ->when($data['end_date'], fn (Builder $query, $date) => $query->whereDate('created_at', '<=', $date));
+                    })
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+
+                        if ($data['start_date'] ?? null) {
+                            $indicators['start_date'] = 'Start Date: ' . (new \DateTime($data['start_date']))->format('F j, Y');
+                        }
+
+                        if ($data['end_date'] ?? null) {
+                            $indicators['end_date'] = 'End Date: ' . (new \DateTime($data['end_date']))->format('F j, Y');
+                        }
+
+                        return $indicators;
+                    }),
             ])
             ->actions([
                // Tables\Actions\EditAction::make(),

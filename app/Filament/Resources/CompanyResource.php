@@ -29,6 +29,9 @@ class CompanyResource extends Resource
                 Forms\Components\TextInput::make('razonSocial')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('nombre')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('telefono')
                     ->tel()
                     ->required()
@@ -48,6 +51,8 @@ class CompanyResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('razonSocial')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('nombre')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('telefono')
                     ->searchable(),
@@ -74,7 +79,6 @@ class CompanyResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

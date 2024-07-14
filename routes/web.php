@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AttendanceController;
 
@@ -18,5 +19,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+
+///para generar la factur
+
+
+Route::get('/facturas/{id}/pdf', [FacturaController::class, 'generarPDF'])->name('print.factura');
+
 
 require __DIR__.'/auth.php';
