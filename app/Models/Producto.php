@@ -19,4 +19,8 @@ class Producto extends Model
     {
         $this->attributes['imagen'] = pathinfo($value, PATHINFO_BASENAME);
     }
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
+    }
 }

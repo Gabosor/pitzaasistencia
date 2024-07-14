@@ -12,7 +12,8 @@ class Company extends Model
         'razonSocial',
         'telefono',
         'email',
-        'user_id'
+        'user_id',
+        'nombre'
     ];
 
     public function user()

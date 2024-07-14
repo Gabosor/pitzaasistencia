@@ -11,7 +11,8 @@ class Pedido extends Model
      protected $fillable = [
         'user_id',
         'total',
-        'estado'
+        'estado',
+        'client_id'
     ];
     public function user()
     {
@@ -20,5 +21,9 @@ class Pedido extends Model
     public function productos()
     {
         return $this->belongsToMany(Producto::class, 'pedido_productos')->withPivot('cantidad');
+    }
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
     }
 }

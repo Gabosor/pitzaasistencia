@@ -41,12 +41,13 @@ class CategoriaResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nombre')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('icono')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                Tables\Columns\ImageColumn::make('icono')
+                    ->label('Icono')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->getStateUsing(function ($record) {
+                        return $record->icono ? asset('storage/img/' . $record->icono) : null;
+                    }),
+
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -57,10 +58,11 @@ class CategoriaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    
                 ]),
             ]);
     }

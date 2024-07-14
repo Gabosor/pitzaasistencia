@@ -1,66 +1,56 @@
 <?php
-
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AttendanceResource\Pages;
-use App\Filament\Resources\AttendanceResource\RelationManagers;
-use App\Models\Attendance;
-use Filament\Forms;
-use Filament\Forms\Form;
+use App\Filament\Resources\PedidoResource\Pages;
+use App\Models\Pedido;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-
 use Filament\Tables\Actions\Action;
-
+use Filament\Tables\Table;
 use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\DatePicker;
+use Illuminate\Database\Eloquent\Builder;
 
-
-
-class AttendanceResource extends Resource
+class PedidoResource extends Resource
 {
-    protected static ?string $model = Attendance::class;
+    protected static ?string $model = Pedido::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
-    protected static ?string $navigationLabel = 'Asistencia';
-    protected static ?string $modelLabel = 'Registro de Asistencia';
-    protected static ?string $navigationGroup = 'Gestión';
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\DateTimePicker::make('timestamp')
-                    ->required(),
-            ]);
-    }
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('timestamp')
+                Tables\Columns\TextColumn::make('user.name')
+                    ->searchable()
+                    ->label('Empleado')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('total')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\IconColumn::make('estado')
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
-                    ->label('Ingreso')
+                    ->searchable()
+                    ->label('Fecha Pedido')
                     ->sortable(),
-                 Tables\Columns\TextColumn::make('user.apellidos')
-                    ->label('Apellidos')
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('client.nombres')
+                    ->searchable()
+                    ->label('Cliente Nombre')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('client.apellidos')
+                    ->label('Cliente Apellidos')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user.nombres')
-                    ->label('Nombres')
-                    ->searchable()
-                    ->sortable(),
-                
             ])
             ->filters([
                 //
-                 Filter::make('date_range')
+                Filter::make('date_range')
                     ->form([
                         DatePicker::make('start_date')
                             ->label('Inicio Fecha')
@@ -89,15 +79,28 @@ class AttendanceResource extends Resource
                     }),
             ])
             ->actions([
-               // Tables\Actions\EditAction::make(),
+                Action::make('toggleEstado')
+                    ->label('Cambiar Estado')
+                    ->action(function (Pedido $record) {
+                        $record->estado = !$record->estado;
+                        $record->save();
+                    })
+                    ->requiresConfirmation()
+                    ->color('success')
+                    ->icon('heroicon-o-arrow-path'),
+                Tables\Actions\DeleteAction::make(),
+                
             ])
-            
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-
+   
                 ]),
-            ])
-            ->headerActions([]);
+            ]);
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
     }
 
     public static function getRelations(): array
@@ -106,16 +109,13 @@ class AttendanceResource extends Resource
             //
         ];
     }
-    public static function canCreate(): bool
-    {
-        return false;
-    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAttendances::route('/'),
-            'create' => Pages\CreateAttendance::route('/create'),
-            'edit' => Pages\EditAttendance::route('/{record}/edit'),
+            'index' => Pages\ListPedidos::route('/'),
+            'create' => Pages\CreatePedido::route('/create'),
+            'edit' => Pages\EditPedido::route('/{record}/edit'),
         ];
     }
 }

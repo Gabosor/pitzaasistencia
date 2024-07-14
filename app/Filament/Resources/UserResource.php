@@ -2,16 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\UserResource\RelationManagers;
 
 class UserResource extends Resource
 {
@@ -88,6 +91,8 @@ class UserResource extends Resource
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('rol')
+                    ->label('Rol')
+                    ->formatStateUsing(fn ($state) => $state ? 'Admin' : 'Empleado')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('SalarioBase')
                     ->numeric()
@@ -99,6 +104,43 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
+                Action::make('changePassword')
+                    ->label('Cambiar Contraseña')
+                    ->form([
+                        Forms\Components\TextInput::make('current_password')
+                            ->label('Contraseña Actual')
+                            ->password()
+                            ->required()
+                            ->rules(['current_password']),
+                        Forms\Components\TextInput::make('new_password')
+                            ->label('Nueva Contraseña')
+                            ->password()
+                            ->required()
+                            ->minLength(8),
+                        Forms\Components\TextInput::make('confirm_password')
+                            ->label('Confirmar Contraseña')
+                            ->password()
+                            ->required()
+                            ->same('new_password'),
+                    ])
+                    ->action(function (array $data) {
+                        $user = Auth::user();
+
+                        // Verificar la contraseña actual
+                        if (!Hash::check($data['current_password'], $user->password)) {
+                            throw new \Exception('La contraseña actual no es correcta.');
+                        }
+
+                        // Actualizar la contraseña
+                        $user->password = Hash::make($data['new_password']);
+                        $user->save();
+                    })
+                    ->modalHeading('Cambiar Contraseña')
+                    ->modalButton('Guardar')
+                    ->requiresConfirmation()
+                    ->visible(fn (User $record) => $record->id === Auth::id()), 
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

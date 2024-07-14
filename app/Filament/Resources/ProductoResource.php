@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ProductoResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ProductoResource\RelationManagers;
-
+use Filament\Tables\Actions\Action;
 class ProductoResource extends Resource
 {
     protected static ?string $model = Producto::class;
@@ -37,6 +37,7 @@ class ProductoResource extends Resource
                         ->image()
                     ->placeholder('Sube la portada de la pelicula aquí'),
                 Forms\Components\Toggle::make('disponible')
+                    ->default(true)
                     ->required(),
                 Forms\Components\Select::make('categoria_id')
                     ->label('Categoria')
@@ -55,12 +56,16 @@ class ProductoResource extends Resource
                 Tables\Columns\TextColumn::make('precio')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('imagen')
-                    ->searchable(),
+                Tables\Columns\ImageColumn::make('imagen')
+                    ->label('Imagen')
+                    ->sortable()
+                    ->getStateUsing(function ($record) {
+                        return $record->imagen ? asset('storage/img/' . $record->imagen) : null;
+                    }),
                 Tables\Columns\IconColumn::make('disponible')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('categoria_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('categoria.nombre')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -75,11 +80,21 @@ class ProductoResource extends Resource
                 //
             ])
             ->actions([
+                Action::make('toggleEstado')
+                    ->label('Cambiar Disponibilidad')
+                    ->action(function (Producto $record) {
+                        $record->disponible = !$record->disponible;
+                        $record->save();
+                    })
+                    ->requiresConfirmation()
+                    ->color('success')
+                    ->icon('heroicon-o-arrow-path'),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
