@@ -28,6 +28,7 @@ class AttendanceResource extends Resource
     protected static ?string $navigationLabel = 'Asistencia';
     protected static ?string $modelLabel = 'Registro de Asistencia';
     protected static ?string $navigationGroup = 'Gestión';
+    protected static ?int $navigationSort = 7;
     public static function form(Form $form): Form
     {
         return $form
