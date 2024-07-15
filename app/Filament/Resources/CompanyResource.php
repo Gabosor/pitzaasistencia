@@ -22,6 +22,7 @@ class CompanyResource extends Resource
     protected static ?string $navigationLabel = 'Compañia';
     protected static ?string $modelLabel = 'Compañia';
     protected static ?string $navigationGroup = 'Gestión';
+    protected static ?int $navigationSort = 8;
     public static function form(Form $form): Form
     {
         return $form

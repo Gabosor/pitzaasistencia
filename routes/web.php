@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AttendanceController;
-
+use App\Http\Controllers\PayrollController;
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
@@ -25,5 +25,9 @@ Route::post('/attendance', [AttendanceController::class, 'store'])->name('attend
 
 Route::get('/facturas/{id}/pdf', [FacturaController::class, 'generarPDF'])->name('print.factura');
 
+//para los salarios
+
+
+Route::get('generate-pdf/{month}/{year}', [PayrollController::class, 'generatePayrollPDF'])->name('generate-pdf');;
 
 require __DIR__.'/auth.php';

@@ -1,9 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Pedido;
-
 use App\Models\Factura;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -13,7 +11,6 @@ class FacturaController extends Controller
 {
     public function generarPDF($id)
     {
-        
         $pedido = Pedido::with('productos')->findOrFail($id);
         $facturaExistente = Factura::where('pedido_id', $pedido->id)->first();
         if ($facturaExistente) {
@@ -33,10 +30,9 @@ class FacturaController extends Controller
         $centavosEnNumeros = str_pad($centavos, 2, '0', STR_PAD_LEFT);
 
         $subtotalEnPalabras = "{$enteroEnPalabras} {$centavosEnNumeros}/100 bolivianos";
-
         $subtotalEnPalabras = ucfirst($subtotalEnPalabras);
 
-         $ultimoNumero = Factura::max('numero') ?? 0;
+        $ultimoNumero = Factura::max('numero') ?? 0;
         $nuevoNumero = $ultimoNumero + 1;
 
         $pdf = PDF::loadView('factura', [
@@ -45,7 +41,6 @@ class FacturaController extends Controller
             'subtotalEnPalabras' => $subtotalEnPalabras,
             'numero' => $nuevoNumero
         ]);
-       
 
         Factura::create([
             'pedido_id' => $pedido->id,
@@ -55,6 +50,6 @@ class FacturaController extends Controller
             'numero' => $nuevoNumero,
         ]);
 
-        return $pdf->download('factura_'.$pedido->id.'.pdf');
+        return $pdf->stream('factura_'.$pedido->id.'.pdf');
     }
 }

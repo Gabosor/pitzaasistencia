@@ -22,6 +22,7 @@ class ServiceResource extends Resource
     protected static ?string $navigationLabel = 'Servicio';
     protected static ?string $modelLabel = 'Servicio';
     protected static ?string $navigationGroup = 'Productos y Servicios';
+    protected static ?int $navigationSort = 5;
     public static function form(Form $form): Form
     {
         return $form
@@ -39,7 +40,7 @@ class ServiceResource extends Resource
                 Forms\Components\Select::make('companie_id')
                     ->label('Compañia')
                     ->required()
-                    ->options(Company::all()->pluck('email', 'id'))
+                    ->options(Company::all()->pluck('nombre', 'id'))
                     ->searchable(),
             ]);
     }
