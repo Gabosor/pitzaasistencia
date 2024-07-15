@@ -50,6 +50,6 @@ class FacturaController extends Controller
             'numero' => $nuevoNumero,
         ]);
 
-        return $pdf->stream('factura_'.$pedido->id.'.pdf');
+        return $pdf->download('factura_'.$pedido->id.'.pdf');
     }
 }
