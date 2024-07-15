@@ -9,7 +9,7 @@ use Dompdf\Options;
 
 class PayrollController extends Controller
 {
-    public function generatePayrollPDF($month, $year)
+     public function generatePayrollPDF($month, $year)
     {
         $employees = User::all();
         $payrollData = [];
@@ -37,6 +37,6 @@ class PayrollController extends Controller
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        return $dompdf->stream('planilla_sueldos.pdf', ['Attachment' => false]);
+        return $dompdf->stream('planilla_sueldos.pdf', ['Attachment' => true]);
     }
 }
